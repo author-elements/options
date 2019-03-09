@@ -44,15 +44,7 @@ class AuthorOptionsElement extends AuthorBaseElement(HTMLElement) {
 
       selectedIndices: {
         readonly: true,
-        get: () => {
-          let array = []
-
-          for (let option of this.selectedOptions) {
-            array.push(option.index)
-          }
-
-          return array
-        }
+        get: () => [...this.selectedOptions].map(option => option.index)
       },
 
       selectedOptions: {
@@ -226,10 +218,9 @@ class AuthorOptionsElement extends AuthorBaseElement(HTMLElement) {
         surrogate.setAttribute('label', label)
 
         let options = optgroup.querySelectorAll('option')
-
-        for (let option of options) {
+        Array.from(options).forEach(option => {
           this.addOption(this.PRIVATE.generateOptionObject(option), null, surrogate)
-        }
+        })
 
         return surrogate
       },
@@ -263,14 +254,13 @@ class AuthorOptionsElement extends AuthorBaseElement(HTMLElement) {
             this.displayElement.innerHTML = sourceElement.innerHTML
 
             // Add additional attributes
-            for (let attr of sourceElement.attributes) {
+            Array.from(sourceElement.attributes).forEach(attr => {
               if (typeof attr.value === 'boolean') {
-                attr.value ? this.displayElement.setAttribute(attr.name, '') : this.displayElement.removeAttribute(attr.name)
-                continue
+                return attr.value ? this.displayElement.setAttribute(attr.name, '') : this.displayElement.removeAttribute(attr.name)
               }
 
               this.displayElement.setAttribute(attr.name, attr.value)
-            }
+            })
 
             _p.set(this, {
               attributes: {
@@ -593,22 +583,20 @@ class AuthorOptionsElement extends AuthorBaseElement(HTMLElement) {
   }
 
   addOptions (children) {
-    for (let child of children) {
+    Array.from(children).forEach(child => {
       let isElement = child instanceof HTMLElement
 
       switch (child.nodeName) {
         case 'OPTION':
-          this.addOption(isElement ? this.PRIVATE.generateOptionObject(child) : child)
-          continue
+          return this.addOption(isElement ? this.PRIVATE.generateOptionObject(child) : child)
 
         case 'OPTGROUP':
-          this.addOptgroup(isElement ? this.PRIVATE.generateOptgroup(child) : child)
-          continue
+          return this.addOptgroup(isElement ? this.PRIVATE.generateOptgroup(child) : child)
 
         default:
-          this.UTIL.printToConsole(`${child.nodeName.toLowerCase()} is not a valid child element for <author-select>. Removing...`, 'warning')
+          return this.UTIL.printToConsole(`${child.nodeName.toLowerCase()} is not a valid child element for <author-select>. Removing...`, 'warning')
       }
-    }
+    })
   }
 
   clear () {
