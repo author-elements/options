@@ -1,4 +1,4 @@
-import buble from 'rollup-plugin-buble'
+import babel from 'rollup-plugin-babel'
 import {uglify} from 'rollup-plugin-uglify'
 import {terser} from 'rollup-plugin-terser'
 import wcbuilder from '@author.io/rollup-plugin-wcbuilder'
@@ -9,6 +9,10 @@ const outdir = './dist'
 const format = 'iife'
 const pkg = require('./package.json')
 const banner = `// Copyright (c) ${(new Date()).getFullYear()} ${pkg.author.name}. ${pkg.license} licensed.\n// ${pkg.name} v${pkg.version} available at ${pkg.repository.url.replace(/git\+|https:\/\/|\.git/gi, '')}\n// Last Build: ${(new Date().toLocaleString({ timeZone: 'UTC'}))}`
+
+const babelConfig = {
+	presets: [['@babel/preset-env', { modules: false }]]
+}
 
 const output = file => {
 	return {
@@ -38,7 +42,7 @@ export default [
 		input,
 		plugins: [
 			wcbuilder(),
-			buble(),
+			babel(babelConfig),
 			uglify()
 		],
 		output: [
@@ -62,7 +66,7 @@ export default [
 		input,
 		plugins: [
 			wcbuilder(),
-			buble()
+			babel(babelConfig)
 		],
 		output: [
 			output('.es5.js')
