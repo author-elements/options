@@ -28,6 +28,12 @@ class AuthorOptionsElement extends AuthorBaseElement(HTMLElement) {
         get: () => this.options.findIndex(option => option.displayElement.hover)
       },
 
+      isSlave: {
+        private: true,
+        readonly: true,
+        get: () => this.parentNode.localName === 'author-select' || this.parentNode.localName === 'author-datalist'
+      },
+
       lastSelectedIndex: {
         private: true
       },
@@ -441,7 +447,7 @@ class AuthorOptionsElement extends AuthorBaseElement(HTMLElement) {
           let comparator = selection.length >= currentSelection.length ? selection.options : currentSelection
           let diff = diffSelections(comparator, comparator === currentSelection ? selection.options : currentSelection)
 
-          if (diff.length === 0) {
+          if (diff.length === 0 || !this.PRIVATE.isSlave) {
             return
           }
 
@@ -501,11 +507,16 @@ class AuthorOptionsElement extends AuthorBaseElement(HTMLElement) {
     this.UTIL.registerListeners(this, {
       connected: () => {
         this.PRIVATE.selectionStartIndex = this.selectedIndex >= 0 ? this.selectedIndex : 0
-        this.parentNode.on('state.change', this.PRIVATE.parentStateChangeHandler)
+
+        if (this.PRIVATE.isSlave) {
+          this.parentNode.on('state.change', this.PRIVATE.parentStateChangeHandler)
+        }
       },
 
       disconnected: () => {
-        this.parentNode.off('state.change', this.PRIVATE.parentStateChangeHandler)
+        if (this.PRIVATE.isSlave) {
+          this.parentNode.off('state.change', this.PRIVATE.parentStateChangeHandler)
+        }
       },
 
       'keydown.arrowUp': this.PRIVATE.arrowUpHandler,
@@ -557,19 +568,24 @@ class AuthorOptionsElement extends AuthorBaseElement(HTMLElement) {
       option = this.PRIVATE.generateOptionObject(option)
     }
 
-    this.parentNode[`${option.index}`] = option.displayElement
+    if (this.PRIVATE.isSlave) {
+      this.parentNode[`${option.index}`] = option.displayElement
+    }
 
     if (index) {
       dest.insertBefore(option.displayElement, dest.children.item(index))
 
       this.options.splice(index, 0, option)
-      this.parentNode.sourceElement.add(option.sourceElement, index)
+
+      if (this.PRIVATE.isSlave) {
+        this.parentNode.sourceElement.add(option.sourceElement, index)
+      }
 
     } else {
       dest.appendChild(option.displayElement)
       this.options.push(option)
 
-      if (!this.parentNode.sourceElement[this.options.length - 1]) {
+      if (this.PRIVATE.isSlave && !this.parentNode.sourceElement[this.options.length - 1]) {
         this.parentNode.sourceElement.appendChild(option.sourceElement)
       }
     }
@@ -611,7 +627,10 @@ class AuthorOptionsElement extends AuthorBaseElement(HTMLElement) {
     }
 
     option.selected = false
-    this.parentNode.selectedOptionsElement.remove(option, updateList)
+
+    if (this.PRIVATE.isSlave) {
+      this.parentNode.selectedOptionsElement.remove(option, updateList)
+    }
   }
 
   deselectAll (showPlaceholder = true) {
