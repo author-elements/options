@@ -31,7 +31,7 @@ class AuthorOptionsElement extends AuthorBaseElement(HTMLElement) {
       isSlave: {
         private: true,
         readonly: true,
-        default: this.parentNode instanceof AuthorSelectElement || this.parentNode instanceof AuthorDatalistElement
+        default: this.parentNode.localName === 'author-select' || this.parentNode.localName === 'author-datalist'
       },
 
       lastSelectedIndex: {
