@@ -507,10 +507,7 @@ class AuthorOptionsElement extends AuthorBaseElement(HTMLElement) {
     this.UTIL.registerListeners(this, {
       connected: () => {
         this.PRIVATE.selectionStartIndex = this.selectedIndex >= 0 ? this.selectedIndex : 0
-
-        if (this.PRIVATE.isSlave) {
-          this.parentNode.on('state.change', this.PRIVATE.parentStateChangeHandler)
-        }
+        this.parentNode.on('state.change', this.PRIVATE.parentStateChangeHandler)
       },
 
       disconnected: () => {
