@@ -28,12 +28,6 @@ class AuthorOptionsElement extends AuthorBaseElement(HTMLElement) {
         get: () => this.options.findIndex(option => option.displayElement.hover)
       },
 
-      isSlave: {
-        private: true,
-        readonly: true,
-        default: this.parentNode.localName === 'author-select' || this.parentNode.localName === 'author-datalist'
-      },
-
       lastSelectedIndex: {
         private: true
       },
@@ -447,7 +441,7 @@ class AuthorOptionsElement extends AuthorBaseElement(HTMLElement) {
           let comparator = selection.length >= currentSelection.length ? selection.options : currentSelection
           let diff = diffSelections(comparator, comparator === currentSelection ? selection.options : currentSelection)
 
-          if (diff.length === 0 || !this.PRIVATE.isSlave) {
+          if (diff.length === 0) {
             return
           }
 
@@ -563,24 +557,19 @@ class AuthorOptionsElement extends AuthorBaseElement(HTMLElement) {
       option = this.PRIVATE.generateOptionObject(option)
     }
 
-    if (this.PRIVATE.isSlave) {
-      this.parentNode[`${option.index}`] = option.displayElement
-    }
+    this.parentNode[`${option.index}`] = option.displayElement
 
     if (index) {
       dest.insertBefore(option.displayElement, dest.children.item(index))
 
       this.options.splice(index, 0, option)
-
-      if (this.PRIVATE.isSlave) {
-        this.parentNode.sourceElement.add(option.sourceElement, index)
-      }
+      this.parentNode.sourceElement.add(option.sourceElement, index)
 
     } else {
       dest.appendChild(option.displayElement)
       this.options.push(option)
 
-      if (this.PRIVATE.isSlave && !this.parentNode.sourceElement[this.options.length - 1]) {
+      if (!this.parentNode.sourceElement[this.options.length - 1]) {
         this.parentNode.sourceElement.appendChild(option.sourceElement)
       }
     }
@@ -622,10 +611,7 @@ class AuthorOptionsElement extends AuthorBaseElement(HTMLElement) {
     }
 
     option.selected = false
-
-    if (this.PRIVATE.isSlave) {
-      this.parentNode.selectedOptionsElement.remove(option, updateList)
-    }
+    this.parentNode.selectedOptionsElement.remove(option, updateList)
   }
 
   deselectAll (showPlaceholder = true) {
