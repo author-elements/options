@@ -703,13 +703,15 @@ class AuthorOptionsElement extends AuthorBaseElement(HTMLElement) {
   }
 
   find (query, caseSensitive = false) {
-    return Array.from(this.options).filter(option => {
+    let results = Array.from(this.options).filter(option => {
       let value = caseSensitive ? option.value : option.value.toLowerCase()
       let text = caseSensitive ? option.text : option.text.toLowerCase()
       query = caseSensitive ? query : query.toLowerCase()
 
       return value.indexOf(query) >= 0 || text.indexOf(query) >= 0
     })
+
+    return Array.isArray(results) ? results : []
   }
 
   hoverOption (index) {
