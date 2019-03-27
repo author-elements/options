@@ -451,25 +451,33 @@ class AuthorOptionsElement extends AuthorBaseElement(HTMLElement) {
             return
           }
 
-          let { beforeChange } = this.parentNode
-
-          let detail = {
+          this.deselectAll()
+          selection.selectAll()
+          this.emit('options.selected', {
             options: selection.options,
             previous: this.selectedOptions,
             next: new (generateAuthorHTMLCollectionConstructor())(selection.displayElements)
-          }
+          }, this.parentNode)
 
-          let cb = () => {
-            this.deselectAll()
-            selection.selectAll()
-            return this.emit('options.selected', detail, this.parentNode)
-          }
-
-          if (!(beforeChange && typeof beforeChange === 'function')) {
-            return cb()
-          }
-
-          beforeChange(this.selectedOptions, detail.next, cb)
+          // let { beforeChange } = this.parentNode
+          //
+          // let detail = {
+          //   options: selection.options,
+          //   previous: this.selectedOptions,
+          //   next: new (generateAuthorHTMLCollectionConstructor())(selection.displayElements)
+          // }
+          //
+          // let cb = () => {
+          //   this.deselectAll()
+          //   selection.selectAll()
+          //   return this.emit('options.selected', detail, this.parentNode)
+          // }
+          //
+          // if (!(beforeChange && typeof beforeChange === 'function')) {
+          //   return cb()
+          // }
+          //
+          // beforeChange(this.selectedOptions, detail.next, cb)
         }
 
         if (!this.multiple) {
