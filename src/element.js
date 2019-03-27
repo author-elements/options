@@ -7,6 +7,11 @@ class AuthorOptionsElement extends AuthorBaseElement(HTMLElement) {
         private: true
       },
 
+      filters: {
+        private: true,
+        default: {}
+      },
+
       form: {
         readonly: true,
         get: () => this.parentNode.form
@@ -375,17 +380,17 @@ class AuthorOptionsElement extends AuthorBaseElement(HTMLElement) {
 
       getCurrentSelection: () => this.options.filter(option => option.selected),
 
-      getFilteredOptions: (query = null, caseSensitive = false) => {
-        if (query !== null) {
-          let results = this.PRIVATE.find(query, caseSensitive)
-
-          if (results.length) {
-            return results
-          }
-        }
-
-        return this.options
+      addFilter: (key = this.UTIL.generateGuid('filter_'), func) => {
+        this.PRIVATE.filters[key] = func
       },
+
+      removeFilter: key => {
+        if (this.PRIVATE.filters.hasOwnProperty(key)) {
+          delete this.PRIVATE.filters[key]
+        }
+      },
+
+      removeAllFilters: () => this.PRIVATE.filters = {},
 
       handleClickSelection: (detail, cb) => {
         let {
