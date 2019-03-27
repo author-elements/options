@@ -110,6 +110,11 @@ class AuthorOptionsElement extends AuthorBaseElement(HTMLElement) {
 
       selectionStartIndex: {
         private: true
+      },
+
+      visibleOptions: {
+        readonly: true,
+        get: () => this.options.filter(option => )
       }
     })
 
@@ -275,7 +280,20 @@ class AuthorOptionsElement extends AuthorBaseElement(HTMLElement) {
                 label: sourceElement.getAttribute('label') || sourceElement.textContent.trim(),
                 selected: sourceElement.selected,
                 value: sourceElement.hasAttribute('value') ? sourceElement.getAttribute('value').trim() : null,
-                text: sourceElement.text.trim()
+                text: sourceElement.text.trim(),
+                hidden: sourceElement.hidden
+              },
+
+              setAttr: (name, value) => {
+                this.sourceElement[name] = value
+
+                if (typeof value === 'boolean') {
+                  value ? this.displayElement.setAttribute(name, '') : this.displayElement.removeAttribute(name)
+                } else {
+                  this.displayElement.setAttribute(name, value)
+                }
+
+                _p.get(this).attributes[name] = value
               }
             })
           }
@@ -285,7 +303,15 @@ class AuthorOptionsElement extends AuthorBaseElement(HTMLElement) {
           }
 
           set disabled (bool) {
-            this.setAttr('disabled', bool)
+            _p.get(this).setAttr('disabled', bool)
+          }
+
+          get hidden () {
+            return _p.get(this).attributes.hidden
+          }
+
+          set hidden (bool) {
+            _p.get(this).setAttr('hidden', bool)
           }
 
           get index () {
@@ -297,7 +323,7 @@ class AuthorOptionsElement extends AuthorBaseElement(HTMLElement) {
           }
 
           set id (id) {
-            this.setAttr('id', id)
+            _p.get(this).setAttr('id', id)
           }
 
           get selected () {
@@ -305,7 +331,7 @@ class AuthorOptionsElement extends AuthorBaseElement(HTMLElement) {
           }
 
           set selected (bool) {
-            this.setAttr('selected', bool)
+            _p.get(this).setAttr('selected', bool)
           }
 
           get label () {
@@ -313,7 +339,7 @@ class AuthorOptionsElement extends AuthorBaseElement(HTMLElement) {
           }
 
           set label (label) {
-            this.setAttr('label', label)
+            _p.get(this).setAttr('label', label)
           }
 
           get text () {
@@ -321,7 +347,7 @@ class AuthorOptionsElement extends AuthorBaseElement(HTMLElement) {
           }
 
           set text (text) {
-            this.setAttr('text', text)
+            _p.get(this).setAttr('text', text)
           }
 
           get value () {
@@ -329,24 +355,12 @@ class AuthorOptionsElement extends AuthorBaseElement(HTMLElement) {
           }
 
           set value (value) {
-            this.setAttr('value', value)
+            _p.get(this).setAttr('value', value)
           }
 
           remove () {
             this.sourceElement.remove()
             this.displayElement.remove()
-          }
-
-          setAttr (name, value) {
-            this.sourceElement[name] = value
-
-            if (typeof value === 'boolean') {
-              value ? this.displayElement.setAttribute(name, '') : this.displayElement.removeAttribute(name)
-            } else {
-              this.displayElement.setAttribute(name, value)
-            }
-
-            _p.get(this).attributes[name] = value
           }
         }
       },
