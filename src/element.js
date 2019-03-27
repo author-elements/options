@@ -114,7 +114,7 @@ class AuthorOptionsElement extends AuthorBaseElement(HTMLElement) {
 
       visibleOptions: {
         readonly: true,
-        get: () => this.options.filter(option => )
+        get: () => this.options.filter(option => !option.hidden)
       }
     })
 
