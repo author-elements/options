@@ -381,6 +381,13 @@ class AuthorOptionsElement extends AuthorBaseElement(HTMLElement) {
       getCurrentSelection: () => this.options.filter(option => option.selected),
 
       addFilter: (key = this.UTIL.generateGuid('filter_'), func) => {
+        if (typeof func !== 'function') {
+          this.UTIL.throwError({
+            type: 'type',
+            message: `Filter must be a function`
+          })
+        }
+
         this.PRIVATE.filters[key] = func
       },
 
