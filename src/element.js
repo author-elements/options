@@ -12,7 +12,7 @@ class AuthorOptionsElement extends AuthorBaseElement(HTMLElement) {
         get: () => {
           let { options } = this
 
-          for (let filter of this.PRIVATE.filters) {
+          for (let filter in this.PRIVATE.filters) {
             options = this.PRIVATE.filters[filter]()
           }
 
