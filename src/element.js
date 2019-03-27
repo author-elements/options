@@ -636,7 +636,7 @@ class AuthorOptionsElement extends AuthorBaseElement(HTMLElement) {
 
     option.selected = false
 
-    if (this.PRIVATE.isSlave) {
+    if (this.PRIVATE.isSlave && this.selectedOptionsElement !== undefined) {
       this.parentNode.selectedOptionsElement.remove(option, updateList)
     }
   }
