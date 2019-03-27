@@ -380,25 +380,6 @@ class AuthorOptionsElement extends AuthorBaseElement(HTMLElement) {
 
       getCurrentSelection: () => this.options.filter(option => option.selected),
 
-      addFilter: (key = this.UTIL.generateGuid('filter_'), func) => {
-        if (typeof func !== 'function') {
-          this.UTIL.throwError({
-            type: 'type',
-            message: `Filter must be a function`
-          })
-        }
-
-        this.PRIVATE.filters[key] = func
-      },
-
-      removeFilter: key => {
-        if (this.PRIVATE.filters.hasOwnProperty(key)) {
-          delete this.PRIVATE.filters[key]
-        }
-      },
-
-      removeAllFilters: () => this.PRIVATE.filters = {},
-
       handleClickSelection: (detail, cb) => {
         let {
           cherryPickedOptions,
@@ -598,6 +579,29 @@ class AuthorOptionsElement extends AuthorBaseElement(HTMLElement) {
       type: 'readonly',
       message: `"selectionStartIndex" cannot be set manually.`
     })
+  }
+
+  addFilter (key = this.UTIL.generateGuid('filter_'), func) {
+    if (typeof func !== 'function') {
+      this.UTIL.throwError({
+        type: 'type',
+        message: `Filter must be a function`
+      })
+    }
+
+    this.PRIVATE.filters[key] = func
+  }
+
+  removeFilter (key) {
+    if (!this.PRIVATE.filters.hasOwnProperty(key)) {
+      return console.warn(`Filter "${key}" not found.`)
+    }
+
+    delete this.PRIVATE.filters[key]
+  }
+
+  removeAllFilters () {
+    this.PRIVATE.filters = {}
   }
 
   addOptgroup (optgroup) {
