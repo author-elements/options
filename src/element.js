@@ -7,6 +7,19 @@ class AuthorOptionsElement extends AuthorBaseElement(HTMLElement) {
         private: true
       },
 
+      filteredOptions: {
+        readonly: true,
+        get: () => {
+          let { options } = this
+
+          for (let filter of this.PRIVATE.filters) {
+            options = this.PRIVATE.filters[filter]()
+          }
+
+          return options
+        }
+      },
+
       filters: {
         private: true,
         default: {}
@@ -188,14 +201,6 @@ class AuthorOptionsElement extends AuthorBaseElement(HTMLElement) {
       diffSelections: (comparator, comparable) => {
         return comparator.filter(option => !comparable.includes(option))
       },
-
-      find: (query, caseSensitive = false) => (Array.from(this.options).filter(option => {
-        let value = caseSensitive ? option.value : option.value.toLowerCase()
-        let text = caseSensitive ? option.text : option.text.toLowerCase()
-        query = caseSensitive ? query : query.toLowerCase()
-
-        return value.indexOf(query) >= 0 || text.indexOf(query) >= 0
-      })),
 
       generateAuthorHTMLOptionsCollectionConstructor: () => {
         let _p = new WeakMap()
@@ -694,6 +699,16 @@ class AuthorOptionsElement extends AuthorBaseElement(HTMLElement) {
   deselectAll (showPlaceholder = true) {
     this.options.filter(option => option.selected).forEach((option, index, options) => {
       this.deselect(option, index = options.length - 1 && showPlaceholder)
+    })
+  }
+
+  find (query, caseSensitive = false) {
+    return Array.from(this.options).filter(option => {
+      let value = caseSensitive ? option.value : option.value.toLowerCase()
+      let text = caseSensitive ? option.text : option.text.toLowerCase()
+      query = caseSensitive ? query : query.toLowerCase()
+
+      return value.indexOf(query) >= 0 || text.indexOf(query) >= 0
     })
   }
 
