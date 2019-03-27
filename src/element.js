@@ -184,6 +184,14 @@ class AuthorOptionsElement extends AuthorBaseElement(HTMLElement) {
         return comparator.filter(option => !comparable.includes(option))
       },
 
+      find: (query, caseSensitive = false) => (Array.from(this.options).filter(option => {
+        let value = caseSensitive ? option.value : option.value.toLowerCase()
+        let text = caseSensitive ? option.text : option.text.toLowerCase()
+        query = caseSensitive ? query : query.toLowerCase()
+
+        return value.indexOf(query) >= 0 || text.indexOf(query) >= 0
+      })),
+
       generateAuthorHTMLOptionsCollectionConstructor: () => {
         let _p = new WeakMap()
 
@@ -366,6 +374,18 @@ class AuthorOptionsElement extends AuthorBaseElement(HTMLElement) {
       },
 
       getCurrentSelection: () => this.options.filter(option => option.selected),
+
+      getFilteredOptions: (query = null, caseSensitive = false) => {
+        if (query !== null) {
+          let results = this.PRIVATE.find(query, caseSensitive)
+
+          if (results.length) {
+            return results
+          }
+        }
+
+        return this.options
+      },
 
       handleClickSelection: (detail, cb) => {
         let {
