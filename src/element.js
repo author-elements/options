@@ -298,8 +298,7 @@ class AuthorOptionsElement extends AuthorBaseElement(HTMLElement) {
                 label: sourceElement.getAttribute('label') || sourceElement.textContent.trim(),
                 selected: sourceElement.selected,
                 value: sourceElement.hasAttribute('value') ? sourceElement.getAttribute('value').trim() : null,
-                text: sourceElement.text.trim(),
-                hidden: sourceElement.hidden
+                text: sourceElement.text.trim()
               },
 
               setAttr: (name, value) => {
@@ -325,11 +324,11 @@ class AuthorOptionsElement extends AuthorBaseElement(HTMLElement) {
           }
 
           get hidden () {
-            return _p.get(this).attributes.hidden
+            return this.displayElement.hidden
           }
 
           set hidden (bool) {
-            _p.get(this).setAttr('hidden', bool)
+            this.displayElement.hidden = bool
           }
 
           get index () {
