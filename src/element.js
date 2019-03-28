@@ -146,7 +146,7 @@ class AuthorOptionsElement extends AuthorBaseElement(HTMLElement) {
               return
 
             default:
-              return this.hoverNextOption(startIndex)
+              return this.PRIVATE.hoverNextOption(startIndex)
           }
 
           return
@@ -177,7 +177,7 @@ class AuthorOptionsElement extends AuthorBaseElement(HTMLElement) {
               return
 
             default:
-              return this.hoverPreviousOption(startIndex)
+              return this.PRIVATE.hoverPreviousOption(startIndex)
           }
 
           return
@@ -389,6 +389,10 @@ class AuthorOptionsElement extends AuthorBaseElement(HTMLElement) {
         let index = startIndex - 1
         let option = this.options[index]
 
+        if (!option) {
+          return null
+        }
+
         if (option.hidden) {
           option = this.getPreviousVisibleOption(index)
         }
@@ -399,6 +403,10 @@ class AuthorOptionsElement extends AuthorBaseElement(HTMLElement) {
       getNextVisibleOption: startIndex => {
         let index = startIndex + 1
         let option = this.options[index]
+
+        if (!option) {
+          return null
+        }
 
         if (option.hidden) {
           option = this.getNextVisibleOption(index)
@@ -477,6 +485,26 @@ class AuthorOptionsElement extends AuthorBaseElement(HTMLElement) {
 
           return cb(selection)
         }
+      },
+
+      hoverPreviousOption: (startIndex) => {
+        let option = this.PRIVATE.getPreviousVisibleOption(startIndex);
+
+        if (!option || option.index === startIndex) {
+          return
+        }
+
+        this.hoverOption(option.index);
+      },
+
+      hoverNextOption: (startIndex) => {
+        let option = this.PRIVATE.getNextVisibleOption(startIndex);
+
+        if (!option || option.index === startIndex) {
+          return
+        }
+
+        this.hoverOption(option.index);
       },
 
       optionSelectionHandler: evt => {
@@ -734,26 +762,6 @@ class AuthorOptionsElement extends AuthorBaseElement(HTMLElement) {
     })
 
     return Array.isArray(results) ? results : []
-  }
-
-  hoverPreviousOption (startIndex) {
-    let option = this.PRIVATE.getPreviousVisibleOption(startIndex)
-
-    if (option.index === startIndex) {
-      return
-    }
-
-    this.hoverOption(option.index)
-  }
-
-  hoverNextOption (startIndex) {
-    let option = this.PRIVATE.getNextVisibleOption(startIndex)
-
-    if (option.index === startIndex) {
-      return
-    }
-
-    this.hoverOption(option.index)
   }
 
   hoverOption (index) {
