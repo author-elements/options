@@ -394,7 +394,7 @@ class AuthorOptionsElement extends AuthorBaseElement(HTMLElement) {
         }
 
         if (option.hidden) {
-          option = this.getPreviousVisibleOption(index)
+          option = this.PRIVATE.getPreviousVisibleOption(index)
         }
 
         return option
@@ -409,7 +409,7 @@ class AuthorOptionsElement extends AuthorBaseElement(HTMLElement) {
         }
 
         if (option.hidden) {
-          option = this.getNextVisibleOption(index)
+          option = this.PRIVATE.getNextVisibleOption(index)
         }
 
         return option

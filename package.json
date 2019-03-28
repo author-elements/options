@@ -1,6 +1,6 @@
 {
   "name": "@author.io/element-options",
-  "version": "1.0.13",
+  "version": "1.0.14",
   "description": "author-options custom element (web component).",
   "main": "dist/author-options.min.js",
   "scripts": {
