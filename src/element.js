@@ -643,7 +643,15 @@ class AuthorOptionsElement extends AuthorBaseElement(HTMLElement) {
       })
     }
 
+    if (this.PRIVATE.filters.hasOwnProperty(key)) {
+      console.warn(`Filter "${key}" alredy exists! Overwriting...`)
+    }
+
     this.PRIVATE.filters[key] = func
+  }
+
+  hasFilter (filter) {
+    return this.PRIVATE.filters.hasOwnProperty(filter)
   }
 
   removeFilter (key) {
