@@ -16,7 +16,7 @@ class AuthorOptionsElement extends AuthorBaseElement(HTMLElement) {
             options = this.PRIVATE.filters[filter]()
           }
 
-          return options
+          return Array.isArray(options) ? options : []
         }
       },
 
