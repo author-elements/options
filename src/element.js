@@ -614,6 +614,11 @@ class AuthorOptionsElement extends AuthorBaseElement(HTMLElement) {
     })
   }
 
+  /**
+   * @property {number} selectedIndex
+   * Represents the index of the first currently-selected option.
+   * If no option is selected, will return -1.
+   */
   get selectedIndex () {
     return this.selectedOptions.length > 0
       ? this.selectedOptions.item(0).index
@@ -622,17 +627,6 @@ class AuthorOptionsElement extends AuthorBaseElement(HTMLElement) {
 
   set selectedIndex (index) {
     this.emit('option.selected', { index })
-  }
-
-  get selectionStartIndex () {
-    return this.PRIVATE.selectionStartIndex
-  }
-
-  set selectionStartIndex (value) {
-    this.UTIL.throwError({
-      type: 'readonly',
-      message: `"selectionStartIndex" cannot be set manually.`
-    })
   }
 
   addFilter (key = this.UTIL.generateGuid('filter_'), func) {
