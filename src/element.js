@@ -735,9 +735,10 @@ class AuthorOptionsElement extends AuthorBaseElement(HTMLElement) {
 
   clear () {
     this.selectedIndex = -1
+    this.innerHTML = ''
 
-    while (this.lastChild) {
-      this.removeChild(this.lastChild)
+    while (this.options.length) {
+      this.options.pop()
     }
   }
 
