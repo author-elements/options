@@ -524,6 +524,10 @@ class AuthorOptionsElement extends AuthorBaseElement(HTMLElement) {
         let { index, keyboard } = evt.detail
 
         let completeOperation = selection => {
+          if (!selection) {
+            return this.emit('cleared')
+          }
+
           let currentSelection = getCurrentSelection()
           let comparator = selection.length >= currentSelection.length ? selection.options : currentSelection
           let diff = diffSelections(comparator, comparator === currentSelection ? selection.options : currentSelection)
@@ -562,7 +566,7 @@ class AuthorOptionsElement extends AuthorBaseElement(HTMLElement) {
         }
 
         if (!this.multiple) {
-          return completeOperation(new Selection([this.options[index]]))
+          return completeOperation(this.options[index] ? new Selection([this.options[index]]) : null)
         }
 
         if (keyboard) {
