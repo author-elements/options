@@ -730,6 +730,8 @@ class AuthorOptionsElement extends AuthorBaseElement(HTMLElement) {
   }
 
   clear () {
+    this.selectedIndex = -1
+
     while (this.lastChild) {
       this.removeChild(this.lastChild)
     }
